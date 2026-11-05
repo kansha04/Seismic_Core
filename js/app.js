@@ -3,19 +3,22 @@ const map = L.map('map', {
   zoom: 2,
   minZoom: 2  // min zoom level to limit the amount
 });
+
 const lightTiles = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const darkTiles = "https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=cb1_4vsj_1_bd25cca8761050c7105f4ba5";
 
-let currentTileLayer = L.tileLayer(lightTiles).addTo(map);
 let isDark = false;
 let earthquakeData = null; // Store fetched earthquake data
 let earthquakeMarkers = L.layerGroup().addTo(map); // Group to manage markers
 let displayedCount = 10; // Initial number of items to show
 
-// Set initial tile layers with attribution
-L.tileLayer(lightTiles, {
-  attribution: '© OpenStreetMap contributors',
+const lightAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>';
+const darkAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+let currentTileLayer = L.tileLayer(lightTiles, {
+  attribution: isDark ? darkAttribution : lightAttribution,
 }).addTo(map);
+
 
 // Function to determine marker style based on magnitude
 const drawMarker = (magnitude) => {
@@ -119,7 +122,9 @@ setInterval(getEarthquakes, 120000);
 document.getElementById("darkBtn").addEventListener("click", () => {
   isDark = !isDark;
   currentTileLayer.remove();
-  currentTileLayer = L.tileLayer(isDark ? darkTiles : lightTiles).addTo(map);
+  currentTileLayer = L.tileLayer(isDark ? darkTiles : lightTiles, {
+    attribution: isDark ? darkAttribution : lightAttribution,
+  }).addTo(map);
   document.body.classList.toggle("dark-mode", isDark);
 });
 
@@ -186,6 +191,5 @@ function showDetail(quake) {
   panel.innerHTML = html;
 
   panel.classList.remove('hidden');
-  panel.scrollIntoView({behavior: 'smooth'});
   map.flyTo([coords[1], coords[0]], 6);
 }
