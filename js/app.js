@@ -4,7 +4,7 @@ const map = L.map('map', {
   minZoom: 2  // min zoom level to limit the amount
 });
 const lightTiles = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-const darkTiles = "https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png";
+const darkTiles = "https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=cb1_4vsj_1_bd25cca8761050c7105f4ba5";
 
 let currentTileLayer = L.tileLayer(lightTiles).addTo(map);
 let isDark = false;
